@@ -19,15 +19,15 @@ _Демонстрировать работу буду уже в установл
 
 Утилита kubectl для управления kubernetes уже была установлена.
 
-![alt text](/images/image6.png)
+![alt text](./images/image6.png)
 
 Запускаю проверяю ноды, здесь у меня 3 ноды развернуты на KVM сервере.
 Создаю Образ docker с помощью и отправляю в docker hub c именем zagretdinov/hw:0.1.
 Теперь да проверю простенький контейнер что он работает.
 
-![alt text](/images/image7.png)
+![alt text](./images/image7.png)
 
-![alt text](/images/image-1.png)
+![alt text](./images/image-1.png)
 
 видно что страничка открылась на 8000 порту.
 
@@ -78,7 +78,7 @@ NAME   READY   STATUS    RESTARTS   AGE
 hw     1/1     Running   0          26s
 ```
 
-![alt text](/images/image-2.png)
+![alt text](./images/image-2.png)
 
 - init-контейнер, скачивающий или генерирующий файл index.html и сохраняющий его в директорию /init
 
@@ -107,9 +107,9 @@ Forwarding from [::1]:8001 -> 8000
 Handling connection for 8001
 Handling connection for 8001
 ```
-![alt text](/images/image-3.png)
+![alt text](./images/image-3.png)
 
-![alt text](/images/image-4.png)
+![alt text](./images/image-4.png)
 
 
 - Общий том (volume) длā основного и initконтейнера, монтируемýй в директориĀ /homework
@@ -134,7 +134,7 @@ Handling connection for 8001
 ```
 В результате.
 
-![alt text](/images/image-5.png)
+![alt text](./images/image-5.png)
 
 - Удалить файл index.html из директории /homework основного контейнера, перед его завершением можно использовать
 
