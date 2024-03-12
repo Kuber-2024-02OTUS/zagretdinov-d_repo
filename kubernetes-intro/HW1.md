@@ -257,5 +257,5 @@ Handling connection for 8000
  - Cсылка http://127.0.0.1:8001/homework/init
 
 ## PR checklist:
- - [ ] Выставлен label с темой домашнего задания
+ - [x] Выставлен label с темой домашнего задания
 
