@@ -247,11 +247,10 @@ Events:
 ## Как запустить проект:
  - Проверяю под с помощью port-forward.
  ```
-devops@devops:~/zagretdinov-d_repo$ kubectl port-forward  hw -n homework 8001:8000
-Forwarding from 127.0.0.1:8000 -> 8000
-Forwarding from [::1]:8000 -> 8000
-Handling connection for 8000
-Handling connection for 8000
+kubectl -n homework port-forward pod/hw 8001:8000
+Forwarding from 127.0.0.1:8001 -> 8000
+Forwarding from [::1]:8001 -> 8000
+Handling connection for 8001
 ```
 ## Как проверить работоспособность:
  - Cсылка http://127.0.0.1:8001/homework/init
