@@ -372,9 +372,78 @@ Events:
   Normal  SuccessfulCreate  4m21s  replicaset-controller  Created pod: hw-service-766b989444-gpg9l
   Normal  SuccessfulCreate  4m21s  replicaset-controller  Created pod: hw-service-766b989444-cgztl
   ```
+### Обновление Deployment
+
+попробую обновить наш Deployment на версию образа 0.4
+```
+   containers:
+      - name: hw-service
+        image: zagretdinov/hw:0.4
+```
+
+- Создание одного нового pod с версией образа 0.4
+- Удаление одного из старых pod
+- Создание еще одного нового pod
+```
+kubectl apply -f hw-deployment.yaml | kubectl get pods -l app=hw-service -w -n homework
+NAME                          READY   STATUS    RESTARTS   AGE
+hw-service-85948648b6-4dn92   1/1     Running   0          28s
+hw-service-85948648b6-9ptnk   1/1     Running   0          28s
+hw-service-85948648b6-dnmc9   1/1     Running   0          28s
+hw-service-6975cb869c-zx9p6   0/1     Pending   0          0s
+hw-service-6975cb869c-zx9p6   0/1     Pending   0          0s
+hw-service-6975cb869c-zx9p6   0/1     Pending   0          0s
+hw-service-6975cb869c-zx9p6   0/1     ContainerCreating   0          0s
+hw-service-6975cb869c-zx9p6   0/1     ContainerCreating   0          0s
+hw-service-6975cb869c-zx9p6   1/1     Running             0          2s
+hw-service-85948648b6-9ptnk   1/1     Terminating         0          30s
+hw-service-6975cb869c-8gbgf   0/1     Pending             0          0s
+hw-service-6975cb869c-8gbgf   0/1     Pending             0          0s
+hw-service-6975cb869c-8gbgf   0/1     Pending             0          0s
+hw-service-6975cb869c-8gbgf   0/1     ContainerCreating   0          0s
+hw-service-6975cb869c-8gbgf   0/1     ContainerCreating   0          0s
+hw-service-85948648b6-9ptnk   0/1     Terminating         0          31s
+hw-service-85948648b6-9ptnk   0/1     Terminating         0          31s
+hw-service-85948648b6-9ptnk   0/1     Terminating         0          31s
+hw-service-85948648b6-9ptnk   0/1     Terminating         0          31s
+hw-service-6975cb869c-8gbgf   1/1     Running             0          2s
+hw-service-85948648b6-dnmc9   1/1     Terminating         0          32s
+hw-service-6975cb869c-5d29t   0/1     Pending             0          0s
+hw-service-6975cb869c-5d29t   0/1     Pending             0          0s
+hw-service-6975cb869c-5d29t   0/1     Pending             0          0s
+hw-service-6975cb869c-5d29t   0/1     ContainerCreating   0          0s
+hw-service-6975cb869c-5d29t   0/1     ContainerCreating   0          0s
+hw-service-85948648b6-dnmc9   0/1     Terminating         0          33s
+hw-service-85948648b6-dnmc9   0/1     Terminating         0          33s
+hw-service-85948648b6-dnmc9   0/1     Terminating         0          33s
+hw-service-85948648b6-dnmc9   0/1     Terminating         0          33s
+hw-service-6975cb869c-5d29t   1/1     Running             0          1s
+hw-service-85948648b6-4dn92   1/1     Terminating         0          33s
+hw-service-85948648b6-4dn92   0/1     Terminating         0          34s
+hw-service-85948648b6-4dn92   0/1     Terminating         0          34s
+hw-service-85948648b6-4dn92   0/1     Terminating         0          34s
+hw-service-85948648b6-4dn92   0/1     Terminating         0          34s
+```
+Убедимся что:
+
+    Все новые pod развернуты из образа 0.4
+    Создано два ReplicaSet:
+        Один (новый) управляет тремя репликами pod с образом 0.4
+        Второй (старый) управляет нулем реплик pod с образом 0.3
 
 
-
+```
+devops@devops:~/zagretdinov-d_repo/kubernetes-controllers$ kubectl get rs -n homework
+NAME                    DESIRED   CURRENT   READY   AGE
+hw                      3         3         3       135m
+hw-service-6975cb869c   3         3         3       99s
+hw-service-85948648b6   0         0         0       2m8s
+devops@devops:~/zagretdinov-d_repo/kubernetes-controllers$ kubectl rollout history deployment hw-service -n homework
+deployment.apps/hw-service 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+```
 ### Задание с *
 
 ___Добавить к манифесту deployment-а спецификацию, обеспечивающую запуск подов деплоймента, только на нодах кластера, имеющих метку homework=true___
