@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hw-service
+  namespace: homework
+  labels:
+    app: hw-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hw-service
+  template:
+    metadata:
+      labels:
+        app: hw-service
+    spec:
+      containers:
+      - name: hw-service
+        image: zagretdinov/hw:0.4
+        readinessProbe:
+          httpGet:
+            path: /index.html
+            port: 8000
+        livenessProbe:
+          tcpSocket: { port: 8000 }
+      initContainers:
+      - name: init-hw
+        image: alpine:latest
+        command: ["/bin/sh", "-c", "mkdir /app/init && echo '<html><body><h1>Help!!! I Live!</h1></body></html>' > /app/init/index.html"]
+        volumeMounts:
+        - name: app
+          mountPath: /app  
+      volumes:
+      - name: app
+        emptyDir: {}
