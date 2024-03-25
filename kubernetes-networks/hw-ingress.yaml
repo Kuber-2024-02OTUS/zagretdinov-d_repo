@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hw-ingress
+spec:
+  rules:
+    - host: homework.otus
+      http:
+        paths:
+          - path: /index.html
+            pathType: Prefix
+            backend:
+              service:
+                name: hw-svc-lb
+                port:
+                  number: 80
